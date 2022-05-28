@@ -34,7 +34,7 @@ class NotificationsFragment : Fragment() {
 
 
         val avatarView = binding.userAvatarView
-        avatarView.loadImage("@drawable/logo.png")
+        avatarView.loadImage("https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg")
         val avatarView1 = binding.userAvatarView1
         avatarView1.loadImage("https://demos.creative-tim.com/argon-dashboard-pro/assets/img/team-2.jpg")
         val avatarView2 = binding.userAvatarView2
