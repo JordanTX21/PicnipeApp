@@ -17,6 +17,7 @@ import com.example.picnipeappp.MainActivity
 import com.example.picnipeappp.databinding.ActivityLoginBinding
 
 import com.example.picnipeappp.R
+import com.example.picnipeappp.ui.register.ui.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -33,6 +34,12 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+        val registerLink = binding.tvRegisterLink
+
+        registerLink?.setOnClickListener {
+            val registerIntent = Intent(this, RegisterActivity::class.java)
+            startActivity(registerIntent)
+        }
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -41,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
-            login.isEnabled = loginState.isDataValid
+//            login.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)
@@ -64,8 +71,8 @@ class LoginActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
-            val main_intent = Intent(this, MainActivity::class.java)
-            startActivity(main_intent)
+            val mainIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainIntent)
         })
 
         username.afterTextChanged {
