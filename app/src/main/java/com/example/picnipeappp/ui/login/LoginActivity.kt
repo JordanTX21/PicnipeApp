@@ -18,6 +18,8 @@ import com.example.picnipeappp.databinding.ActivityLoginBinding
 
 import com.example.picnipeappp.R
 import com.example.picnipeappp.ui.register.ui.RegisterActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
@@ -70,11 +72,22 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
             }
-            setResult(Activity.RESULT_OK)
+            //setResult(Activity.RESULT_OK)
 
-            //Complete and destroy login activity once successful
-            val mainIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainIntent)
+            FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
+                    Toast.makeText(this, it.isSuccessful.toString(), Toast.LENGTH_SHORT).show()
+
+                    if (it.isSuccessful){
+                        val mainIntent = Intent(this, MainActivity::class.java)
+                        var nombreUsuario = usernameGlobal()
+                        UserSingleton.username = loginResult.success?.displayName
+                        nombreUsuario.username = loginResult.success?.displayName
+                        startActivity(mainIntent)
+                    }else{
+                        Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
+                    }
+                }
         })
 
         username.afterTextChanged {

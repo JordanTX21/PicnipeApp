@@ -1,5 +1,6 @@
 package com.example.picnipeappp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        var nombreUsuario = intent.getStringExtra("usuario")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

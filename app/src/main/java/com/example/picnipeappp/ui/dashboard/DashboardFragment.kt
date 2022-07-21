@@ -19,9 +19,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.picnipeappp.R
 import com.example.picnipeappp.data.adapters.ViewPagerAdapter
+import com.example.picnipeappp.data.model.LoggedInUser
 import com.example.picnipeappp.databinding.FragmentDashboardBinding
 import com.example.picnipeappp.ui.components.SavedFragment
 import com.example.picnipeappp.ui.components.UploadsFragment
+import com.example.picnipeappp.ui.login.UserSingleton
+import com.example.picnipeappp.ui.login.usernameGlobal
 import com.google.android.material.tabs.TabLayoutMediator
 import io.getstream.avatarview.AvatarView
 import io.getstream.avatarview.coil.loadImage
@@ -34,6 +37,7 @@ class DashboardFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var loggedInUser:  LoggedInUser
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +52,10 @@ class DashboardFragment : Fragment() {
 
         val avatarView = binding.userAvatarView
         avatarView.loadImage("https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg")
+
+        var nombreUsuario = usernameGlobal()
+
+        binding.userName.text = UserSingleton.username
 
         val viewPager = binding.viewpagerProfile
         val tabLayout = binding.tabLayoutProfile
