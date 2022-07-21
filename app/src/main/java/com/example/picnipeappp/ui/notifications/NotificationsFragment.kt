@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.FragmentNotificationsBinding
+import com.example.picnipeappp.ui.notifications.adapter.NotificationAdapter
 import io.getstream.avatarview.coil.loadImage
 
 class NotificationsFragment : Fragment() {
@@ -33,18 +35,10 @@ class NotificationsFragment : Fragment() {
         val root: View = binding.root
 
 
-        val avatarView = binding.userAvatarView
-        avatarView.loadImage("https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg")
-        val avatarView1 = binding.userAvatarView1
-        avatarView1.loadImage("https://demos.creative-tim.com/argon-dashboard-pro/assets/img/team-2.jpg")
-        val avatarView2 = binding.userAvatarView2
-        avatarView2.loadImage("https://demos.creative-tim.com/argon-dashboard-pro/assets/img/team-3.jpg")
-        val avatarView3 = binding.userAvatarView3
-        avatarView3.loadImage("https://demos.creative-tim.com/argon-dashboard-pro/assets/img/team-4.jpg")
-
 //        val textView: TextView = binding.textNotifications
         notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
+            initRecyclerView()
         })
         return root
     }
@@ -52,5 +46,11 @@ class NotificationsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun initRecyclerView() {
+        val recyclerview = binding.recyclerviewNotifications
+        recyclerview.layoutManager = LinearLayoutManager(context)
+        recyclerview.adapter = NotificationAdapter(NotificationProvider.notificationsList)
     }
 }
