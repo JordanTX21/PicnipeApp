@@ -34,8 +34,8 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = binding.username
-        val password = binding.password
+        val username = binding.usernameR
+        val password = binding.passwordR
         val login = binding.login
         val loading = binding.loading
         val registerLink = binding.tvRegisterLink
