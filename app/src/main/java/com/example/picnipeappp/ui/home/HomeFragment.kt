@@ -63,31 +63,45 @@ class HomeFragment : Fragment() {
         recyclerview.adapter = PostAdapter(PostProvider.postList) { post -> onItemSelected(post) }
     }
 
-    fun initFloatingActionButton(){
-        val dialog = SelectImageDialogFragment(){data -> onOptionSelected(data)}
+    fun initFloatingActionButton() {
+        val dialog = SelectImageDialogFragment() { data -> onOptionSelected(data) }
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-        dialog.show(fragmentManager,"selectImage")
+        dialog.show(fragmentManager, "selectImage")
     }
 
-    fun onOptionSelected(option: Int){
+    fun onOptionSelected(option: Int) {
 
-        if(option == 0){
+        if (option == 0) {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             startForResult.launch(intent)
-        }else if(option == 1){
+        } else if (option == 1) {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
             startForResult.launch(intent)
         }
     }
-    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data?.data
-            // Handle the Intent
-            val dialog = AddPostDialogFragment()
-            val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-            dialog.show(fragmentManager,"createPost")
+
+    val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.data
+                // Handle the Intent
+                val dialog = AddPostDialogFragment(data) { img, title, content ->
+                    onAceptedDialog(
+                        img,
+                        title,
+                        content
+                    )
+                }
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+                dialog.show(fragmentManager, "createPost")
+            }
         }
+
+    fun onAceptedDialog(img: Uri?, title: String, content: String) {
+        //AQUI VA TU CODIGO
+
+        Toast.makeText(context, title, Toast.LENGTH_SHORT).show()
     }
 
     fun onItemSelected(postModel: Post) {
