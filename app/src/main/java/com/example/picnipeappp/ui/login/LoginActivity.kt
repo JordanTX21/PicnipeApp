@@ -42,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
         val loading = binding.loading
         val registerLink = binding.tvRegisterLink
 
+        login.isEnabled = false
+
         registerLink?.setOnClickListener {
             val registerIntent = Intent(this, RegisterActivity::class.java)
             startActivity(registerIntent)

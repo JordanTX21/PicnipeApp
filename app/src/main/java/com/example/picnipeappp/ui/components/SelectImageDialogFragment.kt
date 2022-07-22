@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
@@ -14,7 +15,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.picnipeappp.R
 import com.google.firebase.storage.StorageReference
 
-class SelectImageDialogFragment : DialogFragment()  {
+class SelectImageDialogFragment(private val mycallback:(Uri?) ->Unit) : DialogFragment()  {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val options = arrayOf<String>("Galería","Cámara")
@@ -48,6 +49,7 @@ class SelectImageDialogFragment : DialogFragment()  {
             val data = result.data?.data
             Toast.makeText(context, data.toString(), Toast.LENGTH_SHORT).show()
             //AQUI SE SETEA LA IMAGEN
+            mycallback(data)
 //            binding.imageView.setImageURI(data)
         }
     }
