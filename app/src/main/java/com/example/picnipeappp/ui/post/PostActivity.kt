@@ -2,14 +2,21 @@ package com.example.picnipeappp.ui.post
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.ActivityPostBinding
+import com.example.picnipeappp.ui.components.comments.Comment
+import com.example.picnipeappp.ui.components.comments.CommentAdapter
+import com.example.picnipeappp.ui.components.comments.CommentProvider
 import com.example.picnipeappp.ui.login.UserSingleton
-import io.getstream.avatarview.AvatarView
+import com.example.picnipeappp.ui.notifications.NotificationProvider
+import com.example.picnipeappp.ui.notifications.adapter.NotificationAdapter
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_post.*
 
 class PostActivity : AppCompatActivity() {
@@ -25,12 +32,51 @@ class PostActivity : AppCompatActivity() {
         val post_photo = intent.getStringExtra("post_photo")
         val post_title = intent.getStringExtra("post_title")
         val post_content = intent.getStringExtra("post_content")
+        val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
+        val favPost = findViewById<FloatingActionButton>(R.id.favPost)
 
-        Toast.makeText(this, post_photo, Toast.LENGTH_SHORT).show()
+        var is_fav = false
+
+        favPost.setOnClickListener {
+            if (is_fav) {
+                favPost.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                Toast.makeText(this, "Ya no es favorito", Toast.LENGTH_SHORT).show()
+            } else {
+                favPost.setImageResource(R.drawable.ic_baseline_favorite_24)
+                Toast.makeText(this, "Favorito!", Toast.LENGTH_SHORT).show()
+            }
+            is_fav = !is_fav
+        }
+
+        topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         userDescription.text = UserSingleton.username
 //
         Glide.with(this).load(post_photo).into(imgPost)
         Glide.with(this).load(post_photo).into(userAvatarView)
+
+        val provider = CommentProvider.commentsList
+        val comments = listOf<Int>(1,2,3,4)
+
+        for (comment in comments){
+            provider.add(Comment(
+                "Jordan",
+                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
+                "Me parece una mierda tu foto",
+            ))
+        }
+
+        initRecyclerView()
+
+    }
+
+    fun initRecyclerView() {
+//        Toast.makeText(this, CommentProvider.commentsList.size, Toast.LENGTH_SHORT).show()
+        val recyclerview = findViewById<RecyclerView>(R.id.recyclerviewComments)
+        recyclerview.layoutManager = LinearLayoutManager(this)
+        recyclerview.adapter = CommentAdapter(CommentProvider.commentsList)
 
     }
 }
