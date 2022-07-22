@@ -2,6 +2,7 @@ package com.example.picnipeappp.ui.post
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -66,6 +67,27 @@ class PostActivity : AppCompatActivity() {
                 "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
                 "Me parece una mierda tu foto",
             ))
+        }
+
+        val btnSendComment = findViewById<Button>(R.id.btnSendComment)
+
+        btnSendComment.setOnClickListener{
+//            Toast.makeText(this, "Comentando", Toast.LENGTH_SHORT).show()
+            val comment = tiComment.text.toString().trim()
+            if(comment == ""){
+                Toast.makeText(this, "Ingrese un comentario", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val newComment = Comment(
+                UserSingleton.username.toString(),
+                UserSingleton.photoPerfil.toString(),
+                comment,
+            )
+            tiComment.text?.clear()
+            CommentProvider.commentsList.add(newComment)
+            initRecyclerView()
+
+            //AQUI VA TU CODIGO
         }
 
         initRecyclerView()
