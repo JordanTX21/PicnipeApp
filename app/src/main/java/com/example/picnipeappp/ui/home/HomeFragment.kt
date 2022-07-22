@@ -96,25 +96,32 @@ class HomeFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data?.data
 
-                val ruteStoragePhoto: String = storagePath + "${mauth.uid}/" + "${data.toString()}"
-                val reference: StorageReference = storageReference.child(ruteStoragePhoto)
-                if (data != null) {
-                    reference.putFile(data).addOnSuccessListener {
-                        Toast.makeText(context, "Archivo subido Exitosamente", Toast.LENGTH_SHORT)
-                            .show()
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-
                 // Handle the Intent
-                val dialog = AddPostDialogFragment()
+                val dialog = AddPostDialogFragment(data) { img, title, content ->
+                    onAceptedDialog(
+                        img,
+                        title,
+                        content
+                    )
+                }
                 val fragmentManager = (activity as FragmentActivity).supportFragmentManager
                 dialog.show(fragmentManager, "createPost")
             }
-
         }
+
+    fun onAceptedDialog(img: Uri?, title: String, content: String) {
+        val ruteStoragePhoto: String = storagePath + "${mauth.uid}/" + "${img.toString()}"
+        val reference: StorageReference = storageReference.child(ruteStoragePhoto)
+        if (img != null) {
+            reference.putFile(img).addOnSuccessListener {
+                Toast.makeText(context, "Archivo subido Exitosamente", Toast.LENGTH_SHORT)
+                    .show()
+            }.addOnFailureListener {
+                Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     fun onItemSelected(postModel: Post) {
         val intent = Intent(getActivity(), PostActivity::class.java)
