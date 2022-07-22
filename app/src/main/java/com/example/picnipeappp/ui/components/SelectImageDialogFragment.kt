@@ -12,12 +12,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.example.picnipeappp.R
+import com.google.firebase.storage.StorageReference
 
 class SelectImageDialogFragment : DialogFragment()  {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val options = arrayOf<String>("Galería","Cámara")
-
+            val storageReference : StorageReference
+            val storage_path = "publication/*"
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.pick_image)
                 .setItems(options,
@@ -44,6 +46,7 @@ class SelectImageDialogFragment : DialogFragment()  {
     ){ result ->
         if (result.resultCode == Activity.RESULT_OK){
             val data = result.data?.data
+            Toast.makeText(context, data.toString(), Toast.LENGTH_SHORT).show()
             //AQUI SE SETEA LA IMAGEN
 //            binding.imageView.setImageURI(data)
         }
