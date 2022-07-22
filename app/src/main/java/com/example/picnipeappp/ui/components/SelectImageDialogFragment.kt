@@ -6,12 +6,12 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.picnipeappp.R
+import com.google.firebase.storage.StorageReference
 
 class SelectImageDialogFragment(val mycallback:(Int) ->Unit) : DialogFragment()  {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val options = arrayOf<String>("Galería","Cámara")
-
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.pick_image)
                 .setItems(options,
