@@ -15,14 +15,18 @@ import com.example.picnipeappp.databinding.FragmentHomeBinding
 import com.example.picnipeappp.ui.components.AddPostDialogFragment
 import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.home.adapter.PostAdapter
+import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.post.PostActivity
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
-
+    lateinit var storageReference : StorageReference
+    val storage_path = "publication/"
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -45,7 +49,7 @@ class HomeFragment : Fragment() {
                 initFloatingActionButton()
             }
         })
-
+        storageReference = FirebaseStorage.getInstance().getReference()
 
         return root;
     }
@@ -70,6 +74,7 @@ class HomeFragment : Fragment() {
     }
 
     fun onImageSelected(img: Uri?){
+
 
     }
 
