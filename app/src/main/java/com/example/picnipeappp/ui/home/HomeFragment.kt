@@ -1,6 +1,7 @@
 package com.example.picnipeappp.ui.home
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +59,7 @@ class HomeFragment : Fragment() {
     }
 
     fun initFloatingActionButton(){
-        val dialog = SelectImageDialogFragment()
+        val dialog = SelectImageDialogFragment(){data -> onImageSelected(data)}
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
         dialog.show(fragmentManager,"selectImage")
 //        addPost.setOnClickListener { view ->
@@ -66,6 +67,10 @@ class HomeFragment : Fragment() {
 //                .setAction("Action", null)
 //                .show()
 //        }
+    }
+
+    fun onImageSelected(img: Uri?){
+
     }
 
     fun onItemSelected(postModel: Post) {
