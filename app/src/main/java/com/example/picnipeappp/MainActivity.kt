@@ -10,16 +10,23 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.picnipeappp.databinding.ActivityMainBinding
+import com.example.picnipeappp.ui.login.UserSingleton
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_register.*
 
 class MainActivity : AppCompatActivity() {
-
+    private val bd = FirebaseFirestore.getInstance()
     private lateinit var binding: ActivityMainBinding
+    val user = Firebase.auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var nombreUsuario = intent.getStringExtra("usuario")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         val toolbar = findViewById<Toolbar>(R.id.aToolbar)
         setSupportActionBar(toolbar)
