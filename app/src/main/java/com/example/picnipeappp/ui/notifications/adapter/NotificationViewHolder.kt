@@ -17,6 +17,6 @@ class NotificationViewHolder(view:View): RecyclerView.ViewHolder(view) {
 
         title.text = notificationModel.title
         message.text = notificationModel.message
-        avatarView.loadImage(notificationModel.photo)
+        avatarView.loadImage(notificationModel.fromUserPhoto)
     }
 }

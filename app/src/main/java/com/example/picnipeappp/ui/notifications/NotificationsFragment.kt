@@ -1,21 +1,29 @@
 package com.example.picnipeappp.ui.notifications
 
+import android.net.wifi.hotspot2.pps.Credential
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.picnipeappp.R
+import com.example.picnipeappp.data.model.UserFirebase
 import com.example.picnipeappp.databinding.FragmentNotificationsBinding
+import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.notifications.adapter.NotificationAdapter
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
+import com.google.firebase.ktx.Firebase
 import io.getstream.avatarview.coil.loadImage
 
 class NotificationsFragment : Fragment() {
-
+    private val bd = FirebaseFirestore.getInstance()
     private lateinit var notificationsViewModel: NotificationsViewModel
     private var _binding: FragmentNotificationsBinding? = null
 
@@ -38,9 +46,28 @@ class NotificationsFragment : Fragment() {
 //        val textView: TextView = binding.textNotifications
         notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
-            initRecyclerView()
+            bd.collection("notifications").whereEqualTo("toUserId", UserSingleton.iduser).get().addOnSuccessListener { documents ->
+                var provider = NotificationProvider.notificationsList
+                provider.clear()
+                Toast.makeText(context, documents.toString(), Toast.LENGTH_SHORT).show()
+                for (document in documents) {
+                    provider.add(
+                        Notification(
+                            document.get("titulo").toString() + " - " + document.get("fromUserName").toString(),
+                            document.get("contenido").toString() ,
+                            document.get("fromUserPhoto").toString(),
+                            document.get("fromUseriD").toString(),
+                            document.get("toUserId").toString(),
+                            document.get("fromUserName").toString()
+                        )
+                    )
+                }
+                initRecyclerView()
+            }
+
         })
         return root
+
     }
 
     override fun onDestroyView() {

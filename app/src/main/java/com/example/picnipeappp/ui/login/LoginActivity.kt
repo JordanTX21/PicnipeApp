@@ -19,10 +19,12 @@ import com.example.picnipeappp.databinding.ActivityLoginBinding
 import com.example.picnipeappp.R
 import com.example.picnipeappp.ui.register.ui.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
-
+    private val bd = FirebaseFirestore.getInstance()
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
@@ -34,8 +36,8 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = binding.username
-        val password = binding.password
+        val username = binding.usernameR
+        val password = binding.passwordR
         val login = binding.login
         val loading = binding.loading
         val registerLink = binding.tvRegisterLink
@@ -71,21 +73,22 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginResult.success != null) {
 
-//                FirebaseAuth.getInstance()
-//                    .signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
-//                        if (it.isSuccessful){
-//                            val mainIntent = Intent(this, MainActivity::class.java)
-//                            updateUiWithUser(loginResult.success)
-//                            UserSingleton.username = loginResult.success.displayName
-//                            startActivity(mainIntent)
-//                        }else{
-//                            Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-                val mainIntent = Intent(this, MainActivity::class.java)
-                updateUiWithUser(loginResult.success)
-                UserSingleton.username = loginResult.success.displayName
-                startActivity(mainIntent)
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
+                        if (it.isSuccessful){
+                            val mainIntent = Intent(this, MainActivity::class.java)
+                            val user = Firebase.auth.currentUser
+                            val uid = user?.uid
+                            bd.collection("users").document(uid.toString()).get().addOnSuccessListener {
+                                UserSingleton.username = it.get("Correo") as String?
+                                UserSingleton.name = it.get("Nombre") as String?
+                                UserSingleton.photoPerfil = it.get("fotoPerfil") as String?
+                                UserSingleton.iduser = uid
+                            }
+                            startActivity(mainIntent)
+                        }else{
+                            Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
             setResult(Activity.RESULT_OK)
 

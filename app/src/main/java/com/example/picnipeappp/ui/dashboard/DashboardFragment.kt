@@ -51,11 +51,12 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
 
         val avatarView = binding.userAvatarView
-        avatarView.loadImage("https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg")
 
-        var nombreUsuario = usernameGlobal()
 
-        binding.userName.text = UserSingleton.username
+        avatarView.loadImage(UserSingleton.photoPerfil)
+
+
+        binding.userName.text = UserSingleton.name
 
         val viewPager = binding.viewpagerProfile
         val tabLayout = binding.tabLayoutProfile

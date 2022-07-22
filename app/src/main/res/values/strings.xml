@@ -26,7 +26,8 @@
     <string name="post_title">Titulo</string>
     <string name="pick_image">Subir imagen</string>
     <string name="search">Busrcar</string>
-    <string name="content_description_end_icon">Busrcar</string>
+    <string name="page_title">Publicacion</string>
+    <string name="content_description_end_icon">Buscar</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Mensajes</string>
