@@ -23,10 +23,13 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 
 class PostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostBinding
     private var firestore = FirebaseFirestore.getInstance()
+    private var eliminarLike= FirebaseFirestore.getInstance()
     private val obtenerComents = FirebaseFirestore.getInstance()
 
 
@@ -42,18 +45,53 @@ class PostActivity : AppCompatActivity() {
         val post_content = intent.getStringExtra("post_content")
         val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val favPost = findViewById<FloatingActionButton>(R.id.favPost)
-
         var is_fav = false
 
-        favPost.setOnClickListener {
-            if (is_fav) {
-                favPost.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                Toast.makeText(this, "Ya no es favorito", Toast.LENGTH_SHORT).show()
-            } else {
-                favPost.setImageResource(R.drawable.ic_baseline_favorite_24)
-                Toast.makeText(this, "Favorito!", Toast.LENGTH_SHORT).show()
+        firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").whereEqualTo("idpublicacion" ,post_id)
+            .get().addOnSuccessListener {likes ->
+                    for (like in likes) {
+                        if(like.get("idpublicacion") != null){
+                            is_fav = true
+                            favPost.setImageResource(R.drawable.ic_baseline_favorite_24)
+                        }
+                    }
             }
-            is_fav = !is_fav
+
+
+        favPost.setOnClickListener {
+
+            if (is_fav) {
+
+                firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").whereEqualTo("idpublicacion" ,post_id)
+                    .get().addOnSuccessListener()  { likes ->
+                        for (like in likes) {
+                            eliminarLike.collection("users/${UserSingleton.iduser}/likes").document(like.id).delete()
+                        }
+                        favPost.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                        Toast.makeText(this, "Ya no es favorito", Toast.LENGTH_SHORT).show()
+                        is_fav = false
+                }
+
+            } else {
+
+                var dataLikes = hashMapOf(
+                    "descripcion" to post_content,
+                    "fotoPublicacion" to post_photo,
+                    "idCreador" to "1",
+                    "idpublicacion" to post_id,
+                    "titulo" to post_title
+                )
+
+                firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").add(dataLikes).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        favPost.setImageResource(R.drawable.ic_baseline_favorite_24)
+                        Toast.makeText(this, "Favorito!", Toast.LENGTH_SHORT).show()
+                        is_fav=true
+                    }else{
+                        Toast.makeText(this, "error like dato" , Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         topAppBar.setNavigationOnClickListener {
@@ -70,7 +108,6 @@ class PostActivity : AppCompatActivity() {
         firestore.collection("publications").document(post_id.toString()).collection("comentarios").get().addOnSuccessListener { coments ->
             var provider = CommentProvider.commentsList
             provider.clear()
-            Toast.makeText(this, coments.toString(), Toast.LENGTH_SHORT).show()
             for (coment in coments) {
                 provider.add(
                     Comment(
@@ -135,4 +172,8 @@ class PostActivity : AppCompatActivity() {
         recyclerview.adapter = CommentAdapter(CommentProvider.commentsList)
 
     }
+
+
+
+
 }
