@@ -14,7 +14,7 @@
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/splashscreen.xml" value="0.26296296296296295" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_post.xml" value="0.2296195652173913" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_post.xml" value="0.25" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/dialog_add_post.xml" value="0.22509057971014493" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/each_row.xml" value="0.22282608695652173" />
@@ -24,6 +24,7 @@
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/fragment_saved.xml" value="0.33" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/fragment_search.xml" value="0.24456521739130435" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/fragment_uploads.xml" value="0.1933876811594203" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_comment.xml" value="0.24003623188405798" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_notification.xml" value="0.22282608695652173" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_post.xml" value="0.21829710144927536" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_search.xml" value="0.22083333333333333" />

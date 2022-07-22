@@ -25,9 +25,10 @@
     <string name="post_content">Descripcion</string>
     <string name="post_title">Titulo</string>
     <string name="pick_image">Subir imagen</string>
-    <string name="search">Busrcar</string>
+    <string name="search">Buscar</string>
     <string name="page_title">Publicacion</string>
     <string name="content_description_end_icon">Buscar</string>
+    <string name="add_comment">Agrega un comentario</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Mensajes</string>

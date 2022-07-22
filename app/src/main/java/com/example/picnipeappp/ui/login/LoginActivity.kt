@@ -75,22 +75,22 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginResult.success != null) {
 
-//                FirebaseAuth.getInstance().signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
-//                        if (it.isSuccessful){
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
+                        if (it.isSuccessful){
                             val mainIntent = Intent(this, MainActivity::class.java)
-//                            val user = Firebase.auth.currentUser
-//                            val uid = user?.uid
-//                            bd.collection("users").document(uid.toString()).get().addOnSuccessListener {
-//                                UserSingleton.username = it.get("Correo") as String?
-//                                UserSingleton.name = it.get("Nombre") as String?
-//                                UserSingleton.photoPerfil = it.get("fotoPerfil") as String?
-//                                UserSingleton.iduser = uid
-//                            }
+                            val user = Firebase.auth.currentUser
+                            val uid = user?.uid
+                            bd.collection("users").document(uid.toString()).get().addOnSuccessListener {
+                                UserSingleton.username = it.get("Correo") as String?
+                                UserSingleton.name = it.get("Nombre") as String?
+                                UserSingleton.photoPerfil = it.get("fotoPerfil") as String?
+                                UserSingleton.iduser = uid
+                            }
                             startActivity(mainIntent)
-//                        }else{
-//                            Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
+                        }else{
+                            Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
             setResult(Activity.RESULT_OK)
 
