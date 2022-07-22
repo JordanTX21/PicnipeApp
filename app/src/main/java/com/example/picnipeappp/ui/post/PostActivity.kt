@@ -12,15 +12,21 @@ import com.example.picnipeappp.databinding.ActivityPostBinding
 import com.example.picnipeappp.ui.components.comments.Comment
 import com.example.picnipeappp.ui.components.comments.CommentAdapter
 import com.example.picnipeappp.ui.components.comments.CommentProvider
+import com.example.picnipeappp.ui.home.Post
+import com.example.picnipeappp.ui.home.PostProvider
 import com.example.picnipeappp.ui.login.UserSingleton
+import com.example.picnipeappp.ui.notifications.Notification
 import com.example.picnipeappp.ui.notifications.NotificationProvider
 import com.example.picnipeappp.ui.notifications.adapter.NotificationAdapter
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_post.*
 
 class PostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostBinding
+    private var firestore = FirebaseFirestore.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,23 +58,30 @@ class PostActivity : AppCompatActivity() {
             finish()
         }
 
-        userDescription.text = UserSingleton.username
+        userName.text = post_title
+        userDescription.text = post_content
 //
         Glide.with(this).load(post_photo).into(imgPost)
         Glide.with(this).load(post_photo).into(userAvatarView)
 
-        val provider = CommentProvider.commentsList
-        val comments = listOf<Int>(1,2,3,4)
 
-        for (comment in comments){
-            provider.add(Comment(
-                "Jordan",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "Me parece una mierda tu foto",
-            ))
+        firestore.collection("publications").document(post_id.toString()).collection("comentarios").get().addOnSuccessListener { coments ->
+            var provider = CommentProvider.commentsList
+            provider.clear()
+            Toast.makeText(this, coments.toString(), Toast.LENGTH_SHORT).show()
+            for (coment in coments) {
+                provider.add(
+                    Comment(
+                        coment.id,
+                        coment.get("coment").toString(),
+                        coment.get("fromUserPhoto").toString(),
+                        coment.get("comentUserID").toString()
+                    )
+                )
+            }
+            initRecyclerView()
         }
 
-        initRecyclerView()
 
     }
 

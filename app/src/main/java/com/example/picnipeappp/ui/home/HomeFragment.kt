@@ -22,18 +22,28 @@ import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.home.adapter.PostAdapter
 import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.post.PostActivity
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
+
     lateinit var storageReference: StorageReference
-    val storagePath = "publication/"
     lateinit var mauth : FirebaseAuth
+    lateinit var authorUid : String
+    private var firestore = FirebaseFirestore.getInstance()
+    var dowloadImgUid : String = ""
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -47,6 +57,8 @@ class HomeFragment : Fragment() {
 
         storageReference = FirebaseStorage.getInstance().getReference()
         mauth = FirebaseAuth.getInstance()
+        authorUid = mauth.uid.toString()
+
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
@@ -54,11 +66,30 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            initRecyclerView()
+
+            firestore.collection("publications").get().addOnSuccessListener { post ->
+                var provider = PostProvider.postList
+                provider.clear()
+                for(pos in post){
+                    provider.add(
+                        Post(
+                            pos.id,
+                            pos.get("iduserCreator").toString(),
+                            pos.get("image").toString(),
+                            pos.get("title").toString(),
+                            pos.get("content").toString(),
+                        )
+                    )
+
+                }
+                initRecyclerView()
+            }
+
             val addPost: View = binding.addPost
             addPost.setOnClickListener {
                 initFloatingActionButton()
             }
+
         })
 
 
@@ -110,18 +141,39 @@ class HomeFragment : Fragment() {
         }
 
     fun onAceptedDialog(img: Uri?, title: String, content: String) {
-        val ruteStoragePhoto: String = storagePath + "${mauth.uid}/" + "${img.toString()}"
-        val reference: StorageReference = storageReference.child(ruteStoragePhoto)
+        // Subimos el archivo al storage
+        val reference: StorageReference = storageReference.child("publication").child(authorUid).child(img.toString())
         if (img != null) {
             reference.putFile(img).addOnSuccessListener {
-                Toast.makeText(context, "Archivo subido Exitosamente", Toast.LENGTH_SHORT)
-                    .show()
+                ObtainUrlImg(title, content , authorUid, reference)
+                Toast.makeText(context, "foto cargada", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
-                Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "error al cargar la foto", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+
+    fun ObtainUrlImg(titulo: String , contenido : String , iduser : String ,imagRef : StorageReference){
+        imagRef.downloadUrl.addOnSuccessListener ( OnSuccessListener<Uri> { uri ->
+            dowloadImgUid = uri.toString()
+                var data = hashMapOf(
+                    "title" to contenido,
+                    "content" to titulo,
+                    "iduserCreator" to iduser,
+                    "image" to dowloadImgUid
+                )
+                firestore.collection("publications").add(data).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        Toast.makeText(context, "guardado exitoso" , Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(context, "error al ingreesar en la bd" , Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
+        )
+    }
 
     fun onItemSelected(postModel: Post) {
         val intent = Intent(getActivity(), PostActivity::class.java)
@@ -137,4 +189,8 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+private fun <E> List<E>.clear() {
+    TODO("Not yet implemented")
 }

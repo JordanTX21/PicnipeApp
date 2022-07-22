@@ -13,6 +13,8 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val binding = ItemPostBinding.bind(view)
     var context = view.context
     fun render(postModel: Post,onClickListener:(Post) -> Unit) {
+
+
         Glide.with(binding.ivPost.context).load(postModel.photo)
             .into(binding.ivPost)
         binding.titlePost.text = postModel.title
