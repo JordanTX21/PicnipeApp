@@ -1,11 +1,16 @@
 package com.example.picnipeappp.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -59,22 +64,33 @@ class HomeFragment : Fragment() {
     }
 
     fun initFloatingActionButton(){
-        val dialog = SelectImageDialogFragment(){data -> onImageSelected(data)}
+        val dialog = SelectImageDialogFragment(){data -> onOptionSelected(data)}
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
         dialog.show(fragmentManager,"selectImage")
-//        addPost.setOnClickListener { view ->
-//            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null)
-//                .show()
-//        }
     }
 
-    fun onImageSelected(img: Uri?){
+    fun onOptionSelected(option: Int){
 
+        if(option == 0){
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            startForResult.launch(intent)
+        }else if(option == 1){
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
+            startForResult.launch(intent)
+        }
+    }
+    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data?.data
+            // Handle the Intent
+            val dialog = AddPostDialogFragment()
+            val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+            dialog.show(fragmentManager,"createPost")
+        }
     }
 
     fun onItemSelected(postModel: Post) {
-//        Toast.makeText(context, postModel.content, Toast.LENGTH_SHORT).show()
         val intent = Intent(getActivity(), PostActivity::class.java)
         intent.putExtra("post_id", postModel.id)
         intent.putExtra("post_photo", postModel.photo)
