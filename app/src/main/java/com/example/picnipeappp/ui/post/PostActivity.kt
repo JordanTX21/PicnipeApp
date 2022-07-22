@@ -26,10 +26,6 @@ class PostActivity : AppCompatActivity() {
         val post_title = intent.getStringExtra("post_title")
         val post_content = intent.getStringExtra("post_content")
 
-//        val imgPost = imgPost
-//        val photoUser = userAvatarView
-//        val descriptionUser = userDescription
-
         Toast.makeText(this, post_photo, Toast.LENGTH_SHORT).show()
         userDescription.text = UserSingleton.username
 //

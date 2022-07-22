@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.FragmentHomeBinding
+import com.example.picnipeappp.ui.components.AddPostDialogFragment
+import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.home.adapter.PostAdapter
 import com.example.picnipeappp.ui.post.PostActivity
 
@@ -37,10 +37,12 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//          val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
-//          textView.text = it
             initRecyclerView()
+            val addPost: View = binding.addPost
+            addPost.setOnClickListener {
+                initFloatingActionButton()
+            }
         })
 
 
@@ -53,6 +55,17 @@ class HomeFragment : Fragment() {
         recyclerview.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerview.adapter = PostAdapter(PostProvider.postList) { post -> onItemSelected(post) }
+    }
+
+    fun initFloatingActionButton(){
+        val dialog = SelectImageDialogFragment()
+        val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+        dialog.show(fragmentManager,"selectImage")
+//        addPost.setOnClickListener { view ->
+//            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null)
+//                .show()
+//        }
     }
 
     fun onItemSelected(postModel: Post) {

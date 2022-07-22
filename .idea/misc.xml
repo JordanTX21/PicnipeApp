@@ -8,12 +8,15 @@
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/bordes1.xml" value="0.33240740740740743" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/bordes2.xml" value="0.33240740740740743" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/bordes3.xml" value="0.33240740740740743" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2651282051282051" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/ic_baseline_insert_photo_24.xml" value="0.26481481481481484" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/ic_launcher_background.xml" value="0.27037037037037037" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/splashscreen.xml" value="0.26296296296296295" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_post.xml" value="0.2296195652173913" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/activity_register.xml" value="0.33" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/dialog_add_post.xml" value="0.22509057971014493" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/each_row.xml" value="0.22282608695652173" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/fragment_home.xml" value="0.24456521739130435" />
@@ -27,6 +30,8 @@
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/items_varios.xml" value="0.2296195652173913" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/search_fragment.xml" value="0.24456521739130435" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/toolbar.xml" value="0.24456521739130435" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/top_app_bar.xml" value="0.22056159420289856" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/uplode_reg_photo.xml" value="0.22056159420289856" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.18507362784471218" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout-w936dp/activity_login.xml" value="0.216015625" />

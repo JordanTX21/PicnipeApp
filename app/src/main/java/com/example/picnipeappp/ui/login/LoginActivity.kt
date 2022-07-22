@@ -70,20 +70,22 @@ class LoginActivity : AppCompatActivity() {
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
 
-                FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
-                        if (it.isSuccessful){
-                            val mainIntent = Intent(this, MainActivity::class.java)
-                            var nombreUsuario = usernameGlobal()
-                            UserSingleton.username = loginResult.success?.displayName
-                            nombreUsuario.username = loginResult.success?.displayName
-                            startActivity(mainIntent)
-                        }else{
-                            Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+//                FirebaseAuth.getInstance()
+//                    .signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
+//                        if (it.isSuccessful){
+//                            val mainIntent = Intent(this, MainActivity::class.java)
+//                            updateUiWithUser(loginResult.success)
+//                            UserSingleton.username = loginResult.success.displayName
+//                            startActivity(mainIntent)
+//                        }else{
+//                            Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+                val mainIntent = Intent(this, MainActivity::class.java)
+                updateUiWithUser(loginResult.success)
+                UserSingleton.username = loginResult.success.displayName
+                startActivity(mainIntent)
             }
             setResult(Activity.RESULT_OK)
 
