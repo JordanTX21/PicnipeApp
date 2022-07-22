@@ -14,7 +14,7 @@ class CommentViewHolder(view: View): RecyclerView.ViewHolder(view) {
     val userNameComment = view.findViewById<TextView>(R.id.userNameComment)
     val message = view.findViewById<TextView>(R.id.messageComment)
     fun render(commentModel: Comment){
-        userNameComment.text = commentModel.fromUserNameid
+        userNameComment.text = commentModel.fromUserName
         message.text = commentModel.message
         avatarView.loadImage(commentModel.fromUserPhoto)
     }

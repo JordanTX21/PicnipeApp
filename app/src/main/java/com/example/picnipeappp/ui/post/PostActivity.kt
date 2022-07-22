@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.activity_post.*
 class PostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostBinding
     private var firestore = FirebaseFirestore.getInstance()
+    private val obtenerComents = FirebaseFirestore.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,9 +75,10 @@ class PostActivity : AppCompatActivity() {
                 provider.add(
                     Comment(
                         coment.id,
-                        coment.get("coment").toString(),
+                        coment.get("commentUserID").toString(),
+                        coment.get("commentUserName").toString(),
                         coment.get("fromUserPhoto").toString(),
-                        coment.get("comentUserID").toString()
+                        coment.get("comment").toString(),
                     )
                 )
             }
@@ -94,7 +96,8 @@ class PostActivity : AppCompatActivity() {
             }
             val newComment = Comment(
                 "1",
-                UserSingleton.username.toString(),
+                UserSingleton.iduser.toString(),
+                UserSingleton.name.toString(),
                 UserSingleton.photoPerfil.toString(),
                 comment
             )
@@ -103,6 +106,22 @@ class PostActivity : AppCompatActivity() {
             initRecyclerView()
 
             //AQUI VA TU CODIGO
+
+            var data = hashMapOf(
+                "comment" to newComment.message,
+                "commentUserName" to newComment.fromUserName,
+                "commentUserID" to newComment.fromUserID,
+                "fromUserPhoto" to newComment.fromUserPhoto
+            )
+
+            obtenerComents.collection("publications").document(post_id.toString()).collection("comentarios").add(data).addOnCompleteListener() {
+                if(it.isSuccessful){
+                    Toast.makeText(this, "guardado exitoso" , Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "error al ingreesar en la bd" , Toast.LENGTH_SHORT).show()
+                }
+            }
+
         }
 
         initRecyclerView()
