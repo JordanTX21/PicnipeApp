@@ -9,12 +9,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picnipeappp.databinding.FragmentSavedBinding
 import com.example.picnipeappp.ui.dashboard.components.saveds.SavedAdapter
+import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.post.Post
 import com.example.picnipeappp.ui.post.PostActivity
+import com.example.picnipeappp.ui.post.PostProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class SavedFragment : Fragment() {
     private var _binding:FragmentSavedBinding? = null
     private val binding get() = _binding!!
+    private val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,60 +33,31 @@ class SavedFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSavedBinding.inflate(inflater, container, false)
         val root:View = binding.root
-        initRecycleView()
+
+        firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").get().addOnSuccessListener { post ->
+            var provider = PostProvider.postList
+            provider.clear()
+            for (pos in post) {
+                provider.add(
+                    Post(
+                        pos.id,
+                        pos.get("idCreador").toString(),
+                        pos.get("fotoPublicacion").toString(),
+                        pos.get("titulo").toString(),
+                        pos.get("descripcion").toString(),
+                    )
+                )
+            }
+            initRecycleView()
+        }
+
         return root
     }
 
     fun initRecycleView(){
-        val postList = ArrayList<Post>()
-        postList.add(
-            Post(
-                "id2",
-                "youyouyopi",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "una imagen",
-                "otra cosa"
-            )
-        )
-        postList.add(
-            Post(
-                "id2",
-                "youyouyopi",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "una imagen",
-                "otra cosa"
-            )
-        )
-        postList.add(
-            Post(
-                "id2",
-                "youyouyopi",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "una imagen",
-                "otra cosa"
-            )
-        )
-        postList.add(
-            Post(
-                "id2",
-                "youyouyopi",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "una imagen",
-                "otra cosa"
-            )
-        )
-        postList.add(
-            Post(
-                "id2",
-                "youyouyopi",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "una imagen",
-                "otra cosa"
-            )
-        )
         val recycleView = binding.recyclerviewSaves
         recycleView.layoutManager = GridLayoutManager(context,3)
-        recycleView.adapter = SavedAdapter(postList){post->onItemSelected(post)}
+        recycleView.adapter = SavedAdapter(PostProvider.postList){post->onItemSelected(post)}
     }
 
     fun onItemSelected(post: Post){
