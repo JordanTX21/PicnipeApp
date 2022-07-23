@@ -9,12 +9,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picnipeappp.databinding.FragmentUploadsBinding
 import com.example.picnipeappp.ui.dashboard.components.uploads.UploadAdapter
+import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.post.Post
 import com.example.picnipeappp.ui.post.PostActivity
+import com.example.picnipeappp.ui.post.PostProvider
+import com.google.firebase.firestore.FirebaseFirestore
 
 class UploadsFragment : Fragment() {
     private var _binding: FragmentUploadsBinding? = null
     private val binding get() = _binding!!
+    private val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,45 +31,34 @@ class UploadsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentUploadsBinding.inflate(inflater, container, false)
         val root:View = binding.root
-
-        initRecycleView()
+        firestore.collection("publications").whereEqualTo("iduserCreator", UserSingleton.iduser)
+            .get()
+            .addOnSuccessListener { post ->
+                var provider = PostProvider.postList
+                provider.clear()
+                for (pos in post) {
+                    provider.add(
+                        Post(
+                            pos.id,
+                            pos.get("iduserCreator").toString(),
+                            pos.get("image").toString(),
+                            pos.get("image").toString(),
+                            pos.get("content").toString(),
+                        )
+                    )
+                }
+                initRecycleView()
+            }
 
 //        return inflater.inflate(R.layout.fragment_uploads, container, false)
         return root
     }
 
     fun initRecycleView() {
-        val postList = ArrayList<Post>()
-        postList.add(
-            Post(
-                "id",
-                "raaaaaa",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "mi titulo",
-                "una cosa"
-            )
-        )
-        postList.add(
-            Post(
-                "id",
-                "raaaaaa",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "mi titulo",
-                "una cosa"
-            )
-        )
-        postList.add(
-            Post(
-                "id",
-                "raaaaaa",
-                "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                "mi titulo",
-                "una cosa"
-            )
-        )
+
         val recycleView = binding.recyclerviewUploads
         recycleView.layoutManager = GridLayoutManager(context,3)
-        recycleView.adapter = UploadAdapter(postList){post -> onItemSelected(post)}
+        recycleView.adapter = UploadAdapter(PostProvider.postList){post -> onItemSelected(post)}
     }
 
     fun onItemSelected(post: Post){
