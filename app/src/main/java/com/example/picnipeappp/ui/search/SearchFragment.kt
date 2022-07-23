@@ -99,7 +99,7 @@ class SearchFragment : Fragment() {
                                     userfound.id,
                                     userfound.get("fotoPerfil").toString(),
                                     userfound.get("Nombre").toString(),
-                                    userfound.get("Correo").toString(),
+                                    userfound.get("descripcion").toString(),
                                     userfound.id,
                                     "USER"
                                 )

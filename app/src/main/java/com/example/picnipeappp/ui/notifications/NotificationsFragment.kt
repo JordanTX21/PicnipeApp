@@ -36,7 +36,6 @@ class NotificationsFragment : Fragment() {
 //        val textView: TextView = binding.textNotifications
         notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
-
             firestore.collection("notifications").whereEqualTo("toUserId", UserSingleton.iduser)
                 .get()
                 .addOnSuccessListener { documents ->

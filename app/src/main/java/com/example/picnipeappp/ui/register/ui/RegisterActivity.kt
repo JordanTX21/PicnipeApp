@@ -49,7 +49,8 @@ class RegisterActivity : AppCompatActivity() {
                                 val userCreate = hashMapOf(
                                     "Nombre" to usernameR.text.toString(),
                                     "fotoPerfil" to "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png",
-                                    "Correo" to emailR.text.toString()
+                                    "Correo" to emailR.text.toString(),
+                                    "descripcion" to ""
                                 )
 
 

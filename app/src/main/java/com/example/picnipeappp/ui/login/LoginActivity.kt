@@ -83,14 +83,17 @@ class LoginActivity : AppCompatActivity() {
                                 UserSingleton.name = it.get("Nombre") as String?
                                 UserSingleton.photoPerfil = it.get("fotoPerfil") as String?
                                 UserSingleton.iduser = uid
+                                UserSingleton.descripcion = it.get("descripcion") as String?
+                                login.isEnabled = true
+                                loading.visibility = View.GONE
                                 val mainIntent = Intent(this, MainActivity::class.java)
                                 startActivity(mainIntent)
                             }
                         }else{
+                            login.isEnabled = true
+                            loading.visibility = View.GONE
                             Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
                         }
-                        login.isEnabled = true
-                        loading.visibility = View.GONE
                     }
             }
             setResult(Activity.RESULT_OK)

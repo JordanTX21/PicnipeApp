@@ -49,7 +49,7 @@ class EditProfile : AppCompatActivity() {
         val get_description_user = findViewById<TextInputEditText>(R.id.tiEditDescription)
 
         get_name_user.setText(UserSingleton.name)
-//        get_description_user.setText(UserSingleton.detail)
+        get_description_user.setText(UserSingleton.descripcion)
 
         topAppBarEditProfile.setNavigationOnClickListener {
             finish()
@@ -70,13 +70,24 @@ class EditProfile : AppCompatActivity() {
             val new_description_user = get_description_user.text.toString().trim()
             val new_img_user = imgUri
 
-            val reference: StorageReference = storageReference.child("publication").child(authorUid).child(new_img_user.toString())
-
-            reference.putFile(new_img_user!!).addOnSuccessListener {
-                ObtainUrlImg("title prueba", "content" , authorUid, reference)
-            }.addOnFailureListener {
-                Toast.makeText(this, "Error al subir archivo", Toast.LENGTH_SHORT).show()
+            if(new_img_user!=null){
+                val reference: StorageReference = storageReference.child("improfile").child(authorUid).child(new_img_user.toString())
+                reference.putFile(new_img_user).addOnSuccessListener {
+                    ObtainUrlImg(reference)
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Error al subir archivo", Toast.LENGTH_SHORT).show()
+                }
             }
+
+            firestore.collection("users").document(UserSingleton.iduser.toString())
+                .update(mapOf(
+                    "Nombre" to new_name_user,
+                    "descripcion" to new_description_user
+                ))
+
+            Toast.makeText(this, "Datos de usuario Actualizados", Toast.LENGTH_SHORT).show()
+            UserSingleton.name = new_name_user
+            UserSingleton.descripcion = new_description_user
         }
     }
 
@@ -129,22 +140,14 @@ class EditProfile : AppCompatActivity() {
         return Uri.parse(path.toString())
     }
 
-    fun ObtainUrlImg(titulo: String , contenido : String , iduser : String ,imagRef : StorageReference){
+    fun ObtainUrlImg(imagRef : StorageReference){
         imagRef.downloadUrl.addOnSuccessListener ( OnSuccessListener<Uri> { uri ->
             dowloadImgUid = uri.toString()
-            val data = hashMapOf(
-                "title" to contenido,
-                "content" to titulo,
-                "iduserCreator" to iduser,
-                "image" to dowloadImgUid
-            )
-            firestore.collection("publications").add(data).addOnCompleteListener {
-                if(it.isSuccessful){
-                    Toast.makeText(this, "Publicacion creada" , Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(this, "Error al subir publicación" , Toast.LENGTH_SHORT).show()
+            firestore.collection("users").document(UserSingleton.iduser.toString())
+                .update("fotoPerfil", dowloadImgUid).addOnSuccessListener {
+                    UserSingleton.photoPerfil = dowloadImgUid
                 }
-            }
+
         }
         )
     }

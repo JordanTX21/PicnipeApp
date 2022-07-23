@@ -47,7 +47,7 @@ class DashboardFragment : Fragment() {
 
 
         binding.userName.text = UserSingleton.name
-        binding.descriptionUser.text = UserSingleton.iduser
+        binding.descriptionUser.text = UserSingleton.descripcion
 
 
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
