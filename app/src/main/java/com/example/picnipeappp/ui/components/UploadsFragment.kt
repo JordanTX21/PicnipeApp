@@ -49,7 +49,6 @@ class UploadsFragment : Fragment() {
                 }
                 initRecycleView()
             }
-
 //        return inflater.inflate(R.layout.fragment_uploads, container, false)
         return root
     }
