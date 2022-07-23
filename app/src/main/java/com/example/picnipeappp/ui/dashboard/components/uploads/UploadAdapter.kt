@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.picnipeappp.R
-import com.example.picnipeappp.ui.home.Post
+import com.example.picnipeappp.ui.post.Post
 
-class UploadAdapter(private val postList: List<Post>,private val onClickListener:(Post) -> Unit): RecyclerView.Adapter<UploadViewHolder>() {
+class UploadAdapter(private val postList: List<Post>, private val onClickListener:(Post) -> Unit): RecyclerView.Adapter<UploadViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UploadViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return UploadViewHolder(layoutInflater.inflate(R.layout.item_upload, parent,false))

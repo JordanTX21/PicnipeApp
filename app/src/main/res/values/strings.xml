@@ -29,6 +29,12 @@
     <string name="page_title">Publicacion</string>
     <string name="content_description_end_icon">Buscar</string>
     <string name="add_comment">Agrega un comentario</string>
+    <string name="edit_user_name">Nombre de usario</string>
+    <string name="edit_description_user">Descripcion de usuario</string>
+    <string name="option_close_session">Cerrar Sesion</string>
+    <string name="option_edit_profile">Editar Perfil</string>
+    <string name="option_download_image">Descargar Publicacion</string>
+    <string name="save_edit_user">Actualizar Datos</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Mensajes</string>

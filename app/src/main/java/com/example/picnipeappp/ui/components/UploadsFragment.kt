@@ -6,15 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.FragmentUploadsBinding
 import com.example.picnipeappp.ui.dashboard.components.uploads.UploadAdapter
-import com.example.picnipeappp.ui.home.Post
-import com.example.picnipeappp.ui.home.PostProvider
+import com.example.picnipeappp.ui.post.Post
 import com.example.picnipeappp.ui.post.PostActivity
 
 class UploadsFragment : Fragment() {
@@ -73,7 +68,7 @@ class UploadsFragment : Fragment() {
         recycleView.adapter = UploadAdapter(postList){post -> onItemSelected(post)}
     }
 
-    fun onItemSelected(post:Post){
+    fun onItemSelected(post: Post){
         val intent = Intent(getActivity(), PostActivity::class.java)
         intent.putExtra("post_id", post.id)
         intent.putExtra("post_photo", post.photo)

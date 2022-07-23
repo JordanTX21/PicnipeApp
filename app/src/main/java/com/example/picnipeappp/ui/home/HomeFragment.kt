@@ -1,9 +1,14 @@
 package com.example.picnipeappp.ui.home
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +16,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.picnipeappp.BuildConfig
 import com.example.picnipeappp.databinding.FragmentHomeBinding
 import com.example.picnipeappp.ui.components.AddPostDialogFragment
 import com.example.picnipeappp.ui.components.SelectImageDialogFragment
-import com.example.picnipeappp.ui.home.adapter.PostAdapter
+import com.example.picnipeappp.ui.post.Post
+import com.example.picnipeappp.ui.post.adapter.PostAdapter
 import com.example.picnipeappp.ui.post.PostActivity
+import com.example.picnipeappp.ui.post.PostProvider
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class HomeFragment : Fragment() {
@@ -113,19 +124,22 @@ class HomeFragment : Fragment() {
             startForResult.launch(intent)
         } else if (option == 1) {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
-            startForResult.launch(intent)
+            openCamera.launch(intent)
         }
     }
 
-    val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data?.data
+    val openCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                 val data = result.data!!
+                val bitmap = data.extras!!.get("data") as Bitmap
+                val uri: Uri? = null
 
                 // Handle the Intent
-                val dialog = AddPostDialogFragment(data) { img, title, content ->
+                val dialog = AddPostDialogFragment(uri,bitmap) { img, img2, title, content ->
                     onAceptedDialog(
                         img,
+                        img2,
                         title,
                         content
                     )
@@ -135,7 +149,32 @@ class HomeFragment : Fragment() {
             }
         }
 
-    fun onAceptedDialog(img: Uri?, title: String, content: String) {
+    val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.data
+
+                // Handle the Intent
+                val dialog = AddPostDialogFragment(data) { img, img2, title, content ->
+                    onAceptedDialog(
+                        img,
+                        img2,
+                        title,
+                        content
+                    )
+                }
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+                dialog.show(fragmentManager, "createPost")
+            }
+        }
+
+    private lateinit var file: File
+    private fun createPhotoFile(){
+        val dir = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        file = File.createTempFile("IMG_${System.currentTimeMillis()}_",".jpg",dir)
+    }
+
+    fun onAceptedDialog(img: Uri?,img2: Bitmap?, title: String, content: String) {
         // Subimos el archivo al storage
         val reference: StorageReference = storageReference.child("publication").child(authorUid).child(img.toString())
         if (img != null) {
@@ -144,7 +183,19 @@ class HomeFragment : Fragment() {
             }.addOnFailureListener {
                 Toast.makeText(context, "Error al subir archivo", Toast.LENGTH_SHORT).show()
             }
+        }else if (img2 != null){
+            reference.putFile(getImageUriFromBitmap(context!!,img2)).addOnSuccessListener {
+                ObtainUrlImg(title, content , authorUid, reference)
+            }.addOnFailureListener {
+                Toast.makeText(context, "Error al subir archivo", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+    private fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
     }
 
 

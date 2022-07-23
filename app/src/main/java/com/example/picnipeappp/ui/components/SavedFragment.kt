@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picnipeappp.databinding.FragmentSavedBinding
 import com.example.picnipeappp.ui.dashboard.components.saveds.SavedAdapter
-import com.example.picnipeappp.ui.home.Post
+import com.example.picnipeappp.ui.post.Post
 import com.example.picnipeappp.ui.post.PostActivity
 
 class SavedFragment : Fragment() {
@@ -83,7 +83,7 @@ class SavedFragment : Fragment() {
         recycleView.adapter = SavedAdapter(postList){post->onItemSelected(post)}
     }
 
-    fun onItemSelected(post:Post){
+    fun onItemSelected(post: Post){
         val intent = Intent(getActivity(), PostActivity::class.java)
         intent.putExtra("post_id", post.id)
         intent.putExtra("post_photo", post.photo)

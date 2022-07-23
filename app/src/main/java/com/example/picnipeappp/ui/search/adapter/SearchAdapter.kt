@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.picnipeappp.R
-import com.example.picnipeappp.data.model.User
-import com.example.picnipeappp.ui.home.Post
 import com.example.picnipeappp.ui.search.DinamicSearch
 
 class SearchAdapter(private val searchList: List<DinamicSearch>): RecyclerView.Adapter<SearchViewHolder>() {

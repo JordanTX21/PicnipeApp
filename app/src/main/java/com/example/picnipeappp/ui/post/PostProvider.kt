@@ -1,4 +1,4 @@
-package com.example.picnipeappp.ui.home
+package com.example.picnipeappp.ui.post
 
 class PostProvider {
     companion object {

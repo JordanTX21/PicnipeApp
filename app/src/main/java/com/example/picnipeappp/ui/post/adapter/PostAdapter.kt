@@ -1,12 +1,12 @@
-package com.example.picnipeappp.ui.home.adapter
+package com.example.picnipeappp.ui.post.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.picnipeappp.R
-import com.example.picnipeappp.ui.home.Post
+import com.example.picnipeappp.ui.post.Post
 
-class PostAdapter(private val postList: List<Post>,private val onClickListener:(Post) -> Unit) : RecyclerView.Adapter<PostViewHolder>() {
+class PostAdapter(private val postList: List<Post>, private val onClickListener:(Post) -> Unit) : RecyclerView.Adapter<PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent,false)
