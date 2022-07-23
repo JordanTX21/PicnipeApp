@@ -1,5 +1,6 @@
 package com.example.picnipeappp.ui.search
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,8 @@ import com.example.picnipeappp.R
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.picnipeappp.databinding.FragmentSearchBinding
+import com.example.picnipeappp.ui.post.PostActivity
+import com.example.picnipeappp.ui.profile.ProfileUser
 import com.example.picnipeappp.ui.search.SearchViewModel
 import com.example.picnipeappp.ui.search.adapter.SearchAdapter
 import com.google.android.material.textfield.TextInputEditText
@@ -48,7 +51,27 @@ class SearchFragment : Fragment() {
     fun initRecyclerView(){
         val recyclerview = binding.recyclerviewSearch
         recyclerview.layoutManager = LinearLayoutManager(context)
-        recyclerview.adapter = SearchAdapter(SearchProvider.searchList)
+        recyclerview.adapter = SearchAdapter(SearchProvider.searchList){search -> onItemClick(search)}
+    }
+
+    fun onItemClick(search: DinamicSearch) {
+        if(search.type == "POST"){
+            val intent = Intent(getActivity(), PostActivity::class.java)
+            intent.putExtra("post_id", search.id)
+            intent.putExtra("post_photo", search.photo)
+            intent.putExtra("post_title", search.title)
+            intent.putExtra("post_content", search.detail)
+            intent.putExtra("post_creator", search.iduser)
+            getActivity()?.startActivity(intent)
+        }else if(search.type == "USER"){
+
+            val intent = Intent(getActivity(), ProfileUser::class.java)
+            intent.putExtra("user_id", search.id)
+            intent.putExtra("user_photo", search.photo)
+            intent.putExtra("user_name", search.title)
+            intent.putExtra("user_description", search.detail)
+            getActivity()?.startActivity(intent)
+        }
     }
 
     fun initSearch(root:View){
