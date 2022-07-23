@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.picnipeappp.MainActivity
 import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.ActivityRegisterBinding
+import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.login.usernameGlobal
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -44,13 +45,29 @@ class RegisterActivity : AppCompatActivity() {
                                 ).show()
                                 val mainIntent = Intent(this, MainActivity::class.java)
                                 val uid = FirebaseAuth.getInstance().currentUser?.uid
-                                bd.collection("users").document(uid.toString()).set(
-                                    hashMapOf(
-                                        "Nombre" to usernameR.text.toString(),
-                                        "fotoPerfil" to "https://pbs.twimg.com/media/EjKz0c0WsAQWJwK.jpg",
-                                        "Correo" to emailR.text.toString()
-                                    )
+
+                                var userCreate = hashMapOf(
+                                    "Nombre" to usernameR.text.toString(),
+                                    "fotoPerfil" to "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png",
+                                    "Correo" to emailR.text.toString()
                                 )
+
+
+                                bd.collection("users").document(uid.toString()).set(userCreate)
+
+
+                                var bienvenido = hashMapOf(
+                                    "contenido" to "Te damos las gracias por elegirnos c:",
+                                    "fromUserName" to "Equipo Picnipe",
+                                    "fromUserPhoto" to "https://img.freepik.com/vector-premium/texto-bienvenida-estilo-memphis_136321-654.jpg?w=2000",
+                                    "fromUseriD" to "admin",
+                                    "titulo" to "Bienvenido a Picnipe",
+                                    "toUserId" to uid.toString(),
+                                    "type" to "like",
+                                )
+
+                                bd.collection("notifications").add(bienvenido)
+
                                 startActivity(mainIntent)
                             }
                             else {

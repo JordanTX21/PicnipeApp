@@ -171,7 +171,6 @@ class HomeFragment : Fragment() {
                     }
                 }
         }
-
         )
     }
 
@@ -181,6 +180,7 @@ class HomeFragment : Fragment() {
         intent.putExtra("post_photo", postModel.photo)
         intent.putExtra("post_title", postModel.title)
         intent.putExtra("post_content", postModel.content)
+        intent.putExtra("post_creator", postModel.iduser)
         getActivity()?.startActivity(intent)
     }
 

@@ -31,6 +31,7 @@ class PostActivity : AppCompatActivity() {
     private var firestore = FirebaseFirestore.getInstance()
     private var eliminarLike= FirebaseFirestore.getInstance()
     private val obtenerComents = FirebaseFirestore.getInstance()
+    private val crearNotificacion= FirebaseFirestore.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class PostActivity : AppCompatActivity() {
         val post_photo = intent.getStringExtra("post_photo")
         val post_title = intent.getStringExtra("post_title")
         val post_content = intent.getStringExtra("post_content")
+        val post_id_creator = intent.getStringExtra("post_creator")
         val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val favPost = findViewById<FloatingActionButton>(R.id.favPost)
         var is_fav = false
@@ -82,11 +84,22 @@ class PostActivity : AppCompatActivity() {
                     "titulo" to post_title
                 )
 
+                var TeDieronLike = hashMapOf(
+                    "contenido" to UserSingleton.name.toString() +" le dio like a tu publicacion: " + post_title,
+                    "fromUserName" to UserSingleton.name.toString(),
+                    "fromUserPhoto" to UserSingleton.photoPerfil.toString(),
+                    "fromUseriD" to UserSingleton.iduser.toString(),
+                    "titulo" to "Tienes un nuevo like",
+                    "toUserId" to post_id_creator,
+                    "type" to "like",
+                )
+
                 firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").add(dataLikes).addOnCompleteListener {
                     if(it.isSuccessful){
                         favPost.setImageResource(R.drawable.ic_baseline_favorite_24)
                         Toast.makeText(this, "Favorito!", Toast.LENGTH_SHORT).show()
                         is_fav=true
+                        crearNotificacion.collection("notifications").add(TeDieronLike)
                     }else{
                         Toast.makeText(this, "error like dato" , Toast.LENGTH_SHORT).show()
                     }
@@ -140,6 +153,8 @@ class PostActivity : AppCompatActivity() {
             )
             tiComment.text?.clear()
             CommentProvider.commentsList.add(newComment)
+
+
             initRecyclerView()
 
             //AQUI VA TU CODIGO
@@ -151,9 +166,22 @@ class PostActivity : AppCompatActivity() {
                 "fromUserPhoto" to newComment.fromUserPhoto
             )
 
+
+            var comentaronNotificacion = hashMapOf(
+                "contenido" to UserSingleton.name.toString() + " comento tu publicacion: " + newComment.message,
+                "fromUserName" to UserSingleton.name.toString(),
+                "fromUserPhoto" to UserSingleton.photoPerfil.toString(),
+                "fromUseriD" to UserSingleton.iduser.toString(),
+                "titulo" to "Tienes un nuevo comentario",
+                "toUserId" to post_id_creator,
+                "type" to "comentario",
+            )
+
             obtenerComents.collection("publications").document(post_id.toString()).collection("comentarios").add(data).addOnCompleteListener() {
                 if(it.isSuccessful){
                     Toast.makeText(this, "guardado exitoso" , Toast.LENGTH_SHORT).show()
+                    crearNotificacion.collection("notifications").add(comentaronNotificacion)
+
                 }else{
                     Toast.makeText(this, "error al ingreesar en la bd" , Toast.LENGTH_SHORT).show()
                 }

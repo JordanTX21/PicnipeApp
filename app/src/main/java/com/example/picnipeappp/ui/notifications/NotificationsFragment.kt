@@ -48,31 +48,23 @@ class NotificationsFragment : Fragment() {
         notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
 
-
-
-
-
             bd.collection("notifications").whereEqualTo("toUserId", UserSingleton.iduser).get().addOnSuccessListener { documents ->
                 var provider = NotificationProvider.notificationsList
                 provider.clear()
                 for (document in documents) {
-                    bd.collection("users").document(document.get("fromUseriD").toString()).get().addOnSuccessListener { userdata->
                         provider.add(
                             Notification(
-                                document.get("titulo").toString() + " - " + userdata.get("fromUserName").toString(),
+                                document.get("titulo").toString(),
                                 document.get("contenido").toString(),
-                                userdata.get("fotoPerfil").toString(),
-                                userdata.id,
+                                document.get("fromUserPhoto").toString(),
+                                document.get("fromUseriD").toString(),
                                 document.get("toUserId").toString(),
-                                userdata.get("Nombre").toString()
+                                document.get("fromUserName").toString()
                             )
                         )
                     }
                 }
-
                 initRecyclerView()
-            }
-
         })
         return root
 
