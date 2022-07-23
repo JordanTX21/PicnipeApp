@@ -5,4 +5,5 @@ object UserSingleton {
     var name: String? = ""
     var photoPerfil : String? = ""
     var iduser : String? = ""
+    var descripcion : String? = ""
 }

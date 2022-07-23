@@ -85,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
                                 UserSingleton.name = it.get("Nombre") as String?
                                 UserSingleton.photoPerfil = it.get("fotoPerfil") as String?
                                 UserSingleton.iduser = uid
+                                UserSingleton.iduser = it.get("descripcion") as String?
                             }
                             startActivity(mainIntent)
                         }else{

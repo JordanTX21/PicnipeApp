@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
@@ -18,6 +19,7 @@ import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.login.UserSingleton
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FirebaseFirestore
 import io.getstream.avatarview.AvatarView
 import io.getstream.avatarview.coil.loadImage
 import kotlinx.android.synthetic.main.activity_edit_profile.*
@@ -26,6 +28,7 @@ import java.io.ByteArrayOutputStream
 class EditProfile : AppCompatActivity() {
 
     private var imgUri:Uri? = null
+    private var bd = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,9 @@ class EditProfile : AppCompatActivity() {
             val new_name_user = get_name_user.text.toString().trim()
             val new_description_user = get_description_user.text.toString().trim()
             val new_img_user = imgUri
+
+            
+
         }
     }
 
