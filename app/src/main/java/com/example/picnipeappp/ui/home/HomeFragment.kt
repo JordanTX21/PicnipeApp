@@ -20,17 +20,12 @@ import com.example.picnipeappp.databinding.FragmentHomeBinding
 import com.example.picnipeappp.ui.components.AddPostDialogFragment
 import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.home.adapter.PostAdapter
-import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.post.PostActivity
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
-import java.util.*
-import kotlin.collections.HashMap
 
 
 class HomeFragment : Fragment() {
@@ -68,7 +63,7 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
 
             firestore.collection("publications").get().addOnSuccessListener { post ->
-                var provider = PostProvider.postList
+                val provider = PostProvider.postList
                 provider.clear()
                 for(pos in post){
                     provider.add(
@@ -82,6 +77,7 @@ class HomeFragment : Fragment() {
                     )
 
                 }
+                binding.progressBarHome.visibility = View.GONE
                 initRecyclerView()
             }
 
@@ -97,11 +93,10 @@ class HomeFragment : Fragment() {
     }
 
     fun initRecyclerView() {
-        val recyclerview = binding.rvPost
-        recyclerview.setHasFixedSize(true)
-        recyclerview.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recyclerview.adapter = PostAdapter(PostProvider.postList) { post -> onItemSelected(post) }
+//        val recyclerview = binding.rvPost
+        binding.rvPost.setHasFixedSize(true)
+        binding.rvPost.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.rvPost.adapter = PostAdapter(PostProvider.postList) { post -> onItemSelected(post) }
     }
 
     fun initFloatingActionButton() {
@@ -146,9 +141,8 @@ class HomeFragment : Fragment() {
         if (img != null) {
             reference.putFile(img).addOnSuccessListener {
                 ObtainUrlImg(title, content , authorUid, reference)
-                Toast.makeText(context, "foto cargada", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
-                Toast.makeText(context, "error al cargar la foto", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error al subir archivo", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -157,7 +151,7 @@ class HomeFragment : Fragment() {
     fun ObtainUrlImg(titulo: String , contenido : String , iduser : String ,imagRef : StorageReference){
         imagRef.downloadUrl.addOnSuccessListener ( OnSuccessListener<Uri> { uri ->
             dowloadImgUid = uri.toString()
-                var data = hashMapOf(
+                val data = hashMapOf(
                     "title" to contenido,
                     "content" to titulo,
                     "iduserCreator" to iduser,
@@ -165,9 +159,9 @@ class HomeFragment : Fragment() {
                 )
                 firestore.collection("publications").add(data).addOnCompleteListener {
                     if(it.isSuccessful){
-                        Toast.makeText(context, "guardado exitoso" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Publicacion creada" , Toast.LENGTH_SHORT).show()
                     }else{
-                        Toast.makeText(context, "error al ingreesar en la bd" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error al subir publicación" , Toast.LENGTH_SHORT).show()
                     }
                 }
         }

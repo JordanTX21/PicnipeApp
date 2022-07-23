@@ -167,11 +167,11 @@
 
                 <Button
                     android:id="@+id/btnSendComment"
-                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:insetBottom="0dp"
+                    style="?attr/materialButtonOutlinedStyle"
                     app:icon="@drawable/ic_baseline_send_24" />
             </LinearLayout>
 

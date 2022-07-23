@@ -1,54 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="15dp"
-    android:layout_marginTop="15dp"
-    android:adjustViewBounds="true">
+    android:layout_margin="5dp"
+    android:orientation="vertical">
 
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/ivPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            android:elevation="10dp">
+            android:background="@color/white"
+            android:src="@drawable/bienvenida">
+        </ImageView>
+    </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:id="@+id/ivPost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/bienvenida"
-                android:background="@color/white">
-            </ImageView>
-        </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/titlePost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/post_title"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textSize="12sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/titlePost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Prueba"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout><!--
+</LinearLayout><!--
 
             app:cardElevation="10dp"
         app:cardCornerRadius="8dp"

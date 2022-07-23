@@ -46,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
                                 val mainIntent = Intent(this, MainActivity::class.java)
                                 val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-                                var userCreate = hashMapOf(
+                                val userCreate = hashMapOf(
                                     "Nombre" to usernameR.text.toString(),
                                     "fotoPerfil" to "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png",
                                     "Correo" to emailR.text.toString()
@@ -55,8 +55,7 @@ class RegisterActivity : AppCompatActivity() {
 
                                 bd.collection("users").document(uid.toString()).set(userCreate)
 
-
-                                var bienvenido = hashMapOf(
+                                val bienvenido = hashMapOf(
                                     "contenido" to "Te damos las gracias por elegirnos c:",
                                     "fromUserName" to "Equipo Picnipe",
                                     "fromUserPhoto" to "https://img.freepik.com/vector-premium/texto-bienvenida-estilo-memphis_136321-654.jpg?w=2000",
@@ -65,7 +64,6 @@ class RegisterActivity : AppCompatActivity() {
                                     "toUserId" to uid.toString(),
                                     "type" to "like",
                                 )
-
                                 bd.collection("notifications").add(bienvenido)
 
                                 startActivity(mainIntent)

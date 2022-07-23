@@ -7,15 +7,9 @@
     tools:context=".ui.components.SavedFragment">
 
 
-    <TextView
-        android:id="@+id/tvMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aun no tiene guardados"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.165" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewSaves"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

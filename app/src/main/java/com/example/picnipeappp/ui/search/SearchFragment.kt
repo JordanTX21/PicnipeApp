@@ -6,13 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.example.picnipeappp.R
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.picnipeappp.databinding.FragmentSearchBinding
 import com.example.picnipeappp.ui.search.SearchViewModel
 import com.example.picnipeappp.ui.search.adapter.SearchAdapter
+import com.google.android.material.textfield.TextInputEditText
 
 class SearchFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
@@ -37,6 +40,7 @@ class SearchFragment : Fragment() {
         searchViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
             initRecyclerView()
+            initSearch(root)
         })
         return root
     }
@@ -45,6 +49,21 @@ class SearchFragment : Fragment() {
         val recyclerview = binding.recyclerviewSearch
         recyclerview.layoutManager = LinearLayoutManager(context)
         recyclerview.adapter = SearchAdapter(SearchProvider.searchList)
+    }
+
+    fun initSearch(root:View){
+        val btnSendSearch = root.findViewById<Button>(R.id.btnSendSearch)
+        btnSendSearch.setOnClickListener{
+            val itSearch = root.findViewById<TextInputEditText>(R.id.itSearch)
+            val search = itSearch.text.toString().trim()
+            if(search == ""){
+                Toast.makeText(context, "Ingrese una busqueda válida", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            Toast.makeText(context, search , Toast.LENGTH_SHORT).show()
+            itSearch.text?.clear()
+        }
     }
 
     override fun onDestroyView() {

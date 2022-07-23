@@ -4,35 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.tabs.TabLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ListAdapter
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager.widget.ViewPager
-import com.example.picnipeappp.R
+import androidx.viewpager2.widget.ViewPager2
 import com.example.picnipeappp.data.adapters.ViewPagerAdapter
 import com.example.picnipeappp.data.model.LoggedInUser
 import com.example.picnipeappp.databinding.FragmentDashboardBinding
 import com.example.picnipeappp.ui.components.SavedFragment
 import com.example.picnipeappp.ui.components.UploadsFragment
 import com.example.picnipeappp.ui.login.UserSingleton
-import com.example.picnipeappp.ui.login.usernameGlobal
 import com.google.android.material.tabs.TabLayoutMediator
-import io.getstream.avatarview.AvatarView
 import io.getstream.avatarview.coil.loadImage
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private var _binding: FragmentDashboardBinding? = null
+    private lateinit var viewPager: ViewPager2
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -57,22 +47,27 @@ class DashboardFragment : Fragment() {
 
 
         binding.userName.text = UserSingleton.name
+        binding.descriptionUser.text = UserSingleton.iduser
 
-        val viewPager = binding.viewpagerProfile
-        val tabLayout = binding.tabLayoutProfile
-
-
-        val adapter = ViewPagerAdapter((activity as FragmentActivity).supportFragmentManager)
-        adapter.addFragment(UploadsFragment(),"Subidos")
-        adapter.addFragment(SavedFragment(),"Guardados")
-        viewPager.adapter = adapter
-
-        tabLayout.setupWithViewPager(viewPager)
 
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
 
         })
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initPageViewer()
+    }
+    fun initPageViewer(){
+        val adapter = ViewPagerAdapter(this)
+        adapter.addFragment(UploadsFragment(),"Mis publicaciones")
+        adapter.addFragment(SavedFragment(),"Favoritos")
+        viewpager_profile.adapter = adapter
+        TabLayoutMediator(tab_layout_profile, viewpager_profile) { tab, position ->
+            tab.text = adapter.getFragmentTitle(position)
+        }.attach()
+
     }
 
     override fun onDestroyView() {

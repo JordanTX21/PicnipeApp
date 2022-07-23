@@ -2,29 +2,22 @@ package com.example.picnipeappp.ui.post
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.ActivityPostBinding
 import com.example.picnipeappp.ui.components.comments.Comment
 import com.example.picnipeappp.ui.components.comments.CommentAdapter
 import com.example.picnipeappp.ui.components.comments.CommentProvider
-import com.example.picnipeappp.ui.home.Post
-import com.example.picnipeappp.ui.home.PostProvider
 import com.example.picnipeappp.ui.login.UserSingleton
-import com.example.picnipeappp.ui.notifications.Notification
-import com.example.picnipeappp.ui.notifications.NotificationProvider
-import com.example.picnipeappp.ui.notifications.adapter.NotificationAdapter
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_post.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 
 class PostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostBinding
@@ -49,6 +42,12 @@ class PostActivity : AppCompatActivity() {
         val favPost = findViewById<FloatingActionButton>(R.id.favPost)
         var is_fav = false
 
+        if(post_id_creator == UserSingleton.iduser){
+            favPost.visibility = View.GONE
+        }else{
+            favPost.visibility = View.VISIBLE
+        }
+
         firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").whereEqualTo("idpublicacion" ,post_id)
             .get().addOnSuccessListener {likes ->
                     for (like in likes) {
@@ -70,13 +69,13 @@ class PostActivity : AppCompatActivity() {
                             eliminarLike.collection("users/${UserSingleton.iduser}/likes").document(like.id).delete()
                         }
                         favPost.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                        Toast.makeText(this, "Ya no es favorito", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Eliminado de favorito", Toast.LENGTH_SHORT).show()
                         is_fav = false
                 }
 
             } else {
 
-                var dataLikes = hashMapOf(
+                val dataLikes = hashMapOf(
                     "descripcion" to post_content,
                     "fotoPublicacion" to post_photo,
                     "idCreador" to "1",
@@ -84,7 +83,7 @@ class PostActivity : AppCompatActivity() {
                     "titulo" to post_title
                 )
 
-                var TeDieronLike = hashMapOf(
+                val TeDieronLike = hashMapOf(
                     "contenido" to UserSingleton.name.toString() +" le dio like a tu publicacion: " + post_title,
                     "fromUserName" to UserSingleton.name.toString(),
                     "fromUserPhoto" to UserSingleton.photoPerfil.toString(),
@@ -97,11 +96,11 @@ class PostActivity : AppCompatActivity() {
                 firestore.collection("users").document(UserSingleton.iduser.toString()).collection("likes").add(dataLikes).addOnCompleteListener {
                     if(it.isSuccessful){
                         favPost.setImageResource(R.drawable.ic_baseline_favorite_24)
-                        Toast.makeText(this, "Favorito!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Agregado a favorito!", Toast.LENGTH_SHORT).show()
                         is_fav=true
                         crearNotificacion.collection("notifications").add(TeDieronLike)
                     }else{
-                        Toast.makeText(this, "error like dato" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "error like" , Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -113,13 +112,13 @@ class PostActivity : AppCompatActivity() {
 
         userName.text = post_title
         userDescription.text = post_content
-//
+
         Glide.with(this).load(post_photo).into(imgPost)
         Glide.with(this).load(post_photo).into(userAvatarView)
 
 
         firestore.collection("publications").document(post_id.toString()).collection("comentarios").get().addOnSuccessListener { coments ->
-            var provider = CommentProvider.commentsList
+            val provider = CommentProvider.commentsList
             provider.clear()
             for (coment in coments) {
                 provider.add(
@@ -159,7 +158,7 @@ class PostActivity : AppCompatActivity() {
 
             //AQUI VA TU CODIGO
 
-            var data = hashMapOf(
+            val data = hashMapOf(
                 "comment" to newComment.message,
                 "commentUserName" to newComment.fromUserName,
                 "commentUserID" to newComment.fromUserID,
@@ -167,7 +166,7 @@ class PostActivity : AppCompatActivity() {
             )
 
 
-            var comentaronNotificacion = hashMapOf(
+            val comentaronNotificacion = hashMapOf(
                 "contenido" to UserSingleton.name.toString() + " comento tu publicacion: " + newComment.message,
                 "fromUserName" to UserSingleton.name.toString(),
                 "fromUserPhoto" to UserSingleton.photoPerfil.toString(),
@@ -194,7 +193,6 @@ class PostActivity : AppCompatActivity() {
     }
 
     fun initRecyclerView() {
-//        Toast.makeText(this, CommentProvider.commentsList.size, Toast.LENGTH_SHORT).show()
         val recyclerview = findViewById<RecyclerView>(R.id.recyclerviewComments)
         recyclerview.layoutManager = LinearLayoutManager(this)
         recyclerview.adapter = CommentAdapter(CommentProvider.commentsList)

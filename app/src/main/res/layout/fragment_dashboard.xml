@@ -49,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@+id/userAvatarView" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/descriptionUser"
             android:layout_width="414dp"
             android:layout_height="34dp"
             android:gravity="center"
@@ -88,12 +88,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 
-    </androidx.viewpager.widget.ViewPager>
+    </androidx.viewpager2.widget.ViewPager2>
 </LinearLayout>

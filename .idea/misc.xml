@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.26974358974358975" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/border_button.xml" value="0.24351851851851852" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/bordes.xml" value="0.33240740740740743" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/drawable/bordes1.xml" value="0.33240740740740743" />
@@ -27,27 +28,27 @@
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_comment.xml" value="0.24003623188405798" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_notification.xml" value="0.22282608695652173" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_post.xml" value="0.21829710144927536" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_saved.xml" value="0.23596014492753623" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_search.xml" value="0.22083333333333333" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/item_upload.xml" value="0.23596014492753623" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/items_varios.xml" value="0.2296195652173913" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/search_fragment.xml" value="0.24456521739130435" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/toolbar.xml" value="0.24456521739130435" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/top_app_bar.xml" value="0.22056159420289856" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/layout/uplode_reg_photo.xml" value="0.22056159420289856" />
         <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2" />
+        <entry key="..\:/USUARIO/Documents/AndroidSutioProjects/PicnipeAPPP/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.26974358974358975" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.18507362784471218" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout-w936dp/activity_login.xml" value="0.216015625" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/activity_login.xml" value="0.28802083333333334" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/activity_main.xml" value="0.28802083333333334" />
-        <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/activity_post.xml" value="0.2598958333333333" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/activity_register.xml" value="0.28802083333333334" />
-        <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/dialog_add_post.xml" value="0.2598958333333333" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.28802083333333334" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/fragment_home.xml" value="0.28802083333333334" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/fragment_notifications.xml" value="0.28802083333333334" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/fragment_saved.xml" value="0.28802083333333334" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/fragment_search.xml" value="0.28802083333333334" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/fragment_uploads.xml" value="0.3489583333333333" />
-        <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/item_comment.xml" value="0.2598958333333333" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/item_notification.xml" value="0.3489583333333333" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/item_post.xml" value="0.3489583333333333" />
         <entry key="..\:/Universidad/PicnipeApp/app/src/main/res/layout/settings_activity.xml" value="0.28802083333333334" />
