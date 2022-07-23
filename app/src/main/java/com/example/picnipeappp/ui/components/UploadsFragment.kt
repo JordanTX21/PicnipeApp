@@ -34,7 +34,7 @@ class UploadsFragment : Fragment() {
         firestore.collection("publications").whereEqualTo("iduserCreator", UserSingleton.iduser)
             .get()
             .addOnSuccessListener { post ->
-                var provider = PostProvider.postList
+                val provider = PostProvider.postList
                 provider.clear()
                 for (pos in post) {
                     provider.add(
@@ -42,7 +42,7 @@ class UploadsFragment : Fragment() {
                             pos.id,
                             pos.get("iduserCreator").toString(),
                             pos.get("image").toString(),
-                            pos.get("image").toString(),
+                            pos.get("title").toString(),
                             pos.get("content").toString(),
                         )
                     )

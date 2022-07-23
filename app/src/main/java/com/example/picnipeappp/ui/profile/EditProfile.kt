@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
@@ -16,8 +17,13 @@ import com.example.picnipeappp.R
 import com.example.picnipeappp.ui.components.AddPostDialogFragment
 import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.login.UserSingleton
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import io.getstream.avatarview.AvatarView
 import io.getstream.avatarview.coil.loadImage
 import kotlinx.android.synthetic.main.activity_edit_profile.*
@@ -26,6 +32,11 @@ import java.io.ByteArrayOutputStream
 class EditProfile : AppCompatActivity() {
 
     private var imgUri:Uri? = null
+    lateinit var storageReference: StorageReference
+    lateinit var mauth : FirebaseAuth
+    lateinit var authorUid : String
+    private var firestore = FirebaseFirestore.getInstance()
+    var dowloadImgUid : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,10 +61,22 @@ class EditProfile : AppCompatActivity() {
 
         val btnEditUser = findViewById<Button>(R.id.btnEditUser)
 
+        storageReference = FirebaseStorage.getInstance().getReference()
+        mauth = FirebaseAuth.getInstance()
+        authorUid = mauth.uid.toString()
+
         btnEditUser.setOnClickListener {
             val new_name_user = get_name_user.text.toString().trim()
             val new_description_user = get_description_user.text.toString().trim()
             val new_img_user = imgUri
+
+            val reference: StorageReference = storageReference.child("publication").child(authorUid).child(new_img_user.toString())
+
+            reference.putFile(new_img_user!!).addOnSuccessListener {
+                ObtainUrlImg("title prueba", "content" , authorUid, reference)
+            }.addOnFailureListener {
+                Toast.makeText(this, "Error al subir archivo", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -104,5 +127,25 @@ class EditProfile : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
+    }
+
+    fun ObtainUrlImg(titulo: String , contenido : String , iduser : String ,imagRef : StorageReference){
+        imagRef.downloadUrl.addOnSuccessListener ( OnSuccessListener<Uri> { uri ->
+            dowloadImgUid = uri.toString()
+            val data = hashMapOf(
+                "title" to contenido,
+                "content" to titulo,
+                "iduserCreator" to iduser,
+                "image" to dowloadImgUid
+            )
+            firestore.collection("publications").add(data).addOnCompleteListener {
+                if(it.isSuccessful){
+                    Toast.makeText(this, "Publicacion creada" , Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "Error al subir publicación" , Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        )
     }
 }

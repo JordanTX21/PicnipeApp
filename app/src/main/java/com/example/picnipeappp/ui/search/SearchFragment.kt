@@ -24,6 +24,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val busquedaUser = FirebaseFirestore.getInstance()
     private val busquedaPost = FirebaseFirestore.getInstance()
+    private val provider = SearchProvider.searchList
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -44,6 +45,7 @@ class SearchFragment : Fragment() {
         searchViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
 
+            provider.clear()
             initRecyclerView()
             initSearch(root)
         })
@@ -87,12 +89,11 @@ class SearchFragment : Fragment() {
                 return@setOnClickListener
             } else {
                 binding.progressBarSearch.visibility = View.VISIBLE
-                val provider = SearchProvider.searchList
                 provider.clear()
 
                 busquedaUser.collection("users").get().addOnSuccessListener { usersfoud ->
                     for (userfound in usersfoud) {
-                        if (userfound.get("Nombre").toString().contains(search)) {
+                        if (userfound.get("Nombre").toString().uppercase().contains(search.uppercase())) {
                             provider.add(
                                 DinamicSearch(
                                     userfound.id,
@@ -111,7 +112,7 @@ class SearchFragment : Fragment() {
                 }
                 busquedaPost.collection("publications").get().addOnSuccessListener { postsfoud ->
                     for (postfoud in postsfoud) {
-                        if (postfoud.get("title").toString().contains(search)) {
+                        if (postfoud.get("title").toString().uppercase().contains(search.uppercase())) {
                             provider.add(
                                 DinamicSearch(
                                     postfoud.id,

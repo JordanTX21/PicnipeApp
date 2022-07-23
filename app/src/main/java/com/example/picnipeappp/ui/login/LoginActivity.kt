@@ -69,7 +69,6 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
             }
@@ -90,6 +89,8 @@ class LoginActivity : AppCompatActivity() {
                         }else{
                             Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
                         }
+                        login.isEnabled = true
+                        loading.visibility = View.GONE
                     }
             }
             setResult(Activity.RESULT_OK)
@@ -123,6 +124,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
+                login.isEnabled = false
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
