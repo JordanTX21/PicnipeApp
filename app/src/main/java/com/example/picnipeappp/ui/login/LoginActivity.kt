@@ -77,7 +77,6 @@ class LoginActivity : AppCompatActivity() {
 
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(username.text.toString() , password.text.toString()).addOnCompleteListener {
                         if (it.isSuccessful){
-                            val mainIntent = Intent(this, MainActivity::class.java)
                             val user = Firebase.auth.currentUser
                             val uid = user?.uid
                             bd.collection("users").document(uid.toString()).get().addOnSuccessListener {
@@ -85,9 +84,10 @@ class LoginActivity : AppCompatActivity() {
                                 UserSingleton.name = it.get("Nombre") as String?
                                 UserSingleton.photoPerfil = it.get("fotoPerfil") as String?
                                 UserSingleton.iduser = uid
-                                UserSingleton.iduser = it.get("descripcion") as String?
+                                UserSingleton.descripcion = it.get("descripcion") as String?
+                                val mainIntent = Intent(this, MainActivity::class.java)
+                                startActivity(mainIntent)
                             }
-                            startActivity(mainIntent)
                         }else{
                             Toast.makeText(this, "Error al autenticar", Toast.LENGTH_SHORT).show()
                         }

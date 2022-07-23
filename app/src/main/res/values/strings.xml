@@ -59,6 +59,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="tab_profile_user_upload">Publicaciones del usuario</string>
 
     <!--  DIALOGS  -->
     <string name="dialog_add_post">Publica una nueva imagen</string>

@@ -4,17 +4,22 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picnipeappp.databinding.ItemSearchBinding
+import com.example.picnipeappp.ui.post.Post
 import com.example.picnipeappp.ui.search.DinamicSearch
 
 class SearchViewHolder(view:View): RecyclerView.ViewHolder(view) {
     val binding = ItemSearchBinding.bind(view)
 
-    fun render(searchModel: DinamicSearch){
+    fun render(searchModel: DinamicSearch, onClickListener:(DinamicSearch) -> Unit){
         Glide.with(binding.ivImgSearch.context).load(searchModel.photo)
             .into(binding.ivImgSearch)
 
         binding.titleSearch.text = searchModel.title
         binding.detailSearch.text = searchModel.detail
+
+        binding.ivImgSearch.setOnClickListener{
+            onClickListener(searchModel)
+        }
 
     }
 }

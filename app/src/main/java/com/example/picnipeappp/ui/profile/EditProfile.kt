@@ -17,9 +17,14 @@ import com.example.picnipeappp.R
 import com.example.picnipeappp.ui.components.AddPostDialogFragment
 import com.example.picnipeappp.ui.components.SelectImageDialogFragment
 import com.example.picnipeappp.ui.login.UserSingleton
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import io.getstream.avatarview.AvatarView
 import io.getstream.avatarview.coil.loadImage
 import kotlinx.android.synthetic.main.activity_edit_profile.*
@@ -28,7 +33,11 @@ import java.io.ByteArrayOutputStream
 class EditProfile : AppCompatActivity() {
 
     private var imgUri:Uri? = null
-    private var bd = FirebaseFirestore.getInstance()
+    lateinit var storageReference: StorageReference
+    lateinit var mauth : FirebaseAuth
+    lateinit var authorUid : String
+    private var firestore = FirebaseFirestore.getInstance()
+    var dowloadImgUid : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,13 +62,31 @@ class EditProfile : AppCompatActivity() {
 
         val btnEditUser = findViewById<Button>(R.id.btnEditUser)
 
+
+        storageReference = FirebaseStorage.getInstance().getReference()
+        mauth = FirebaseAuth.getInstance()
+        authorUid = mauth.uid.toString()
+
         btnEditUser.setOnClickListener {
             val new_name_user = get_name_user.text.toString().trim()
             val new_description_user = get_description_user.text.toString().trim()
             val new_img_user = imgUri
 
-            
+            val reference: StorageReference = storageReference.child("improfile").child(authorUid).child(new_img_user.toString())
+            reference.putFile(new_img_user!!).addOnSuccessListener {
+                ObtainUrlImg(reference)
+            }.addOnFailureListener {
+                Toast.makeText(this, "Error al subir archivo", Toast.LENGTH_SHORT).show()
+            }
 
+            firestore.collection("users").document(UserSingleton.iduser.toString())
+                .update(mapOf(
+                    "Nombre" to new_name_user,
+                    "descripcion" to new_description_user
+                ))
+
+            UserSingleton.name = new_name_user
+            UserSingleton.descripcion = new_description_user
         }
     }
 
@@ -110,5 +137,17 @@ class EditProfile : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
+    }
+
+    fun ObtainUrlImg(imagRef : StorageReference){
+        imagRef.downloadUrl.addOnSuccessListener ( OnSuccessListener<Uri> { uri ->
+            dowloadImgUid = uri.toString()
+            firestore.collection("users").document(UserSingleton.iduser.toString())
+                .update("fotoPerfil", dowloadImgUid).addOnSuccessListener {
+                    UserSingleton.photoPerfil = dowloadImgUid
+                }
+
+        }
+        )
     }
 }

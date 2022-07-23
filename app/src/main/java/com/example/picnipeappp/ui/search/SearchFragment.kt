@@ -1,5 +1,6 @@
 package com.example.picnipeappp.ui.search
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,16 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import com.example.picnipeappp.R
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.picnipeappp.databinding.FragmentSearchBinding
-import com.example.picnipeappp.ui.components.comments.Comment
-import com.example.picnipeappp.ui.components.comments.CommentProvider
-import com.example.picnipeappp.ui.login.UserSingleton
-import com.example.picnipeappp.ui.search.SearchViewModel
+import com.example.picnipeappp.ui.post.PostActivity
+import com.example.picnipeappp.ui.profile.ProfileUser
 import com.example.picnipeappp.ui.search.adapter.SearchAdapter
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,8 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 class SearchFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
     private var _binding: FragmentSearchBinding? = null
-    private val busquedaUser= FirebaseFirestore.getInstance()
-    private val busquedaPost= FirebaseFirestore.getInstance()
+    private val busquedaUser = FirebaseFirestore.getInstance()
+    private val busquedaPost = FirebaseFirestore.getInstance()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -51,27 +50,49 @@ class SearchFragment : Fragment() {
         return root
     }
 
-    fun initRecyclerView(){
+    fun initRecyclerView() {
         val recyclerview = binding.recyclerviewSearch
         recyclerview.layoutManager = LinearLayoutManager(context)
-        recyclerview.adapter = SearchAdapter(SearchProvider.searchList)
+        recyclerview.adapter =
+            SearchAdapter(SearchProvider.searchList) { search -> onItemClick(search) }
     }
 
-    fun initSearch(root:View){
+    fun onItemClick(search: DinamicSearch) {
+        if (search.type == "POST") {
+            val intent = Intent(getActivity(), PostActivity::class.java)
+            intent.putExtra("post_id", search.id)
+            intent.putExtra("post_photo", search.photo)
+            intent.putExtra("post_title", search.title)
+            intent.putExtra("post_content", search.detail)
+            intent.putExtra("post_creator", search.iduser)
+            getActivity()?.startActivity(intent)
+        } else if (search.type == "USER") {
+
+            val intent = Intent(getActivity(), ProfileUser::class.java)
+            intent.putExtra("user_id", search.id)
+            intent.putExtra("user_photo", search.photo)
+            intent.putExtra("user_name", search.title)
+            intent.putExtra("user_description", search.detail)
+            getActivity()?.startActivity(intent)
+        }
+    }
+
+    fun initSearch(root: View) {
         val btnSendSearch = root.findViewById<Button>(R.id.btnSendSearch)
-        btnSendSearch.setOnClickListener{
+        btnSendSearch.setOnClickListener {
             val itSearch = root.findViewById<TextInputEditText>(R.id.itSearch)
             val search = itSearch.text.toString().trim()
-            if(search == ""){
+            if (search == "") {
                 Toast.makeText(context, "Ingrese una busqueda válida", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            } else{
+            } else {
+                binding.progressBarSearch.visibility = View.VISIBLE
                 val provider = SearchProvider.searchList
                 provider.clear()
 
                 busquedaUser.collection("users").get().addOnSuccessListener { usersfoud ->
                     for (userfound in usersfoud) {
-                        if(userfound.get("Nombre").toString().contains(search)){
+                        if (userfound.get("Nombre").toString().contains(search)) {
                             provider.add(
                                 DinamicSearch(
                                     userfound.id,
@@ -84,27 +105,31 @@ class SearchFragment : Fragment() {
                             )
                         }
                     }
+                    binding.progressBarSearch.visibility = View.GONE
+                    initRecyclerView()
+                    itSearch.text?.clear()
                 }
                 busquedaPost.collection("publications").get().addOnSuccessListener { postsfoud ->
                     for (postfoud in postsfoud) {
-                        if(postfoud.get("title").toString().contains(search)){
-                        provider.add(
-                            DinamicSearch(
-                                postfoud.id,
-                                postfoud.get("image").toString(),
-                                postfoud.get("title").toString(),
-                                postfoud.get("content").toString(),
-                                postfoud.get("iduserCreator").toString(),
-                                "POST"
+                        if (postfoud.get("title").toString().contains(search)) {
+                            provider.add(
+                                DinamicSearch(
+                                    postfoud.id,
+                                    postfoud.get("image").toString(),
+                                    postfoud.get("title").toString(),
+                                    postfoud.get("content").toString(),
+                                    postfoud.get("iduserCreator").toString(),
+                                    "POST"
+                                )
                             )
-                        )
                         }
                     }
+                    binding.progressBarSearch.visibility = View.GONE
+                    initRecyclerView()
+                    itSearch.text?.clear()
                 }
             }
 
-            Toast.makeText(context, search , Toast.LENGTH_SHORT).show()
-            itSearch.text?.clear()
         }
     }
 

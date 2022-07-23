@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.picnipeappp.MainActivity
 import com.example.picnipeappp.R
 import com.example.picnipeappp.databinding.ActivityRegisterBinding
+import com.example.picnipeappp.ui.login.LoginActivity
 import com.example.picnipeappp.ui.login.UserSingleton
 import com.example.picnipeappp.ui.login.usernameGlobal
 import com.google.firebase.auth.FirebaseAuth
@@ -43,7 +44,6 @@ class RegisterActivity : AppCompatActivity() {
                                     "Usuario creado con exito",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                val mainIntent = Intent(this, MainActivity::class.java)
                                 val uid = FirebaseAuth.getInstance().currentUser?.uid
 
                                 val userCreate = hashMapOf(
@@ -66,6 +66,12 @@ class RegisterActivity : AppCompatActivity() {
                                     "type" to "like",
                                 )
                                 bd.collection("notifications").add(bienvenido)
+                                UserSingleton.username = userCreate["Correo"]
+                                UserSingleton.name = userCreate["Nombre"]
+                                UserSingleton.photoPerfil = userCreate["fotoPerfil"]
+                                UserSingleton.iduser = uid
+
+                                val mainIntent = Intent(this, MainActivity::class.java)
 
                                 startActivity(mainIntent)
                             }
